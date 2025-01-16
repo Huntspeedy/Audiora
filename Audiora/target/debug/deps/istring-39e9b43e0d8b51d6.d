@@ -1,0 +1,12 @@
+/Users/pc/Desktop/project/Audiora/target/debug/deps/libistring-39e9b43e0d8b51d6.rmeta: /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/istring-0.3.4/src/lib.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/istring-0.3.4/src/common.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/istring-0.3.4/src/istring.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/istring-0.3.4/src/small.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/istring-0.3.4/src/ibytes.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/istring-0.3.4/src/tiny.rs
+
+/Users/pc/Desktop/project/Audiora/target/debug/deps/libistring-39e9b43e0d8b51d6.rlib: /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/istring-0.3.4/src/lib.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/istring-0.3.4/src/common.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/istring-0.3.4/src/istring.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/istring-0.3.4/src/small.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/istring-0.3.4/src/ibytes.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/istring-0.3.4/src/tiny.rs
+
+/Users/pc/Desktop/project/Audiora/target/debug/deps/istring-39e9b43e0d8b51d6.d: /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/istring-0.3.4/src/lib.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/istring-0.3.4/src/common.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/istring-0.3.4/src/istring.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/istring-0.3.4/src/small.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/istring-0.3.4/src/ibytes.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/istring-0.3.4/src/tiny.rs
+
+/Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/istring-0.3.4/src/lib.rs:
+/Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/istring-0.3.4/src/common.rs:
+/Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/istring-0.3.4/src/istring.rs:
+/Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/istring-0.3.4/src/small.rs:
+/Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/istring-0.3.4/src/ibytes.rs:
+/Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/istring-0.3.4/src/tiny.rs:

@@ -1,0 +1,12 @@
+/Users/pc/Desktop/project/Audiora/target/debug/deps/libminreq-98d180f7e409e39e.rmeta: /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/minreq-2.13.0/src/lib.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/minreq-2.13.0/src/connection.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/minreq-2.13.0/src/error.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/minreq-2.13.0/src/http_url.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/minreq-2.13.0/src/request.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/minreq-2.13.0/src/response.rs
+
+/Users/pc/Desktop/project/Audiora/target/debug/deps/libminreq-98d180f7e409e39e.rlib: /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/minreq-2.13.0/src/lib.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/minreq-2.13.0/src/connection.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/minreq-2.13.0/src/error.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/minreq-2.13.0/src/http_url.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/minreq-2.13.0/src/request.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/minreq-2.13.0/src/response.rs
+
+/Users/pc/Desktop/project/Audiora/target/debug/deps/minreq-98d180f7e409e39e.d: /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/minreq-2.13.0/src/lib.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/minreq-2.13.0/src/connection.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/minreq-2.13.0/src/error.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/minreq-2.13.0/src/http_url.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/minreq-2.13.0/src/request.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/minreq-2.13.0/src/response.rs
+
+/Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/minreq-2.13.0/src/lib.rs:
+/Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/minreq-2.13.0/src/connection.rs:
+/Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/minreq-2.13.0/src/error.rs:
+/Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/minreq-2.13.0/src/http_url.rs:
+/Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/minreq-2.13.0/src/request.rs:
+/Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/minreq-2.13.0/src/response.rs:

@@ -1,0 +1,11 @@
+/Users/pc/Desktop/project/Audiora/target/debug/deps/libslice_deque-e6febb4b824f49b1.rmeta: /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/slice-deque-0.3.0/src/lib.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/slice-deque-0.3.0/src/macros.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/slice-deque-0.3.0/src/mirrored/mod.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/slice-deque-0.3.0/src/mirrored/buffer.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/slice-deque-0.3.0/src/mirrored/macos.rs
+
+/Users/pc/Desktop/project/Audiora/target/debug/deps/libslice_deque-e6febb4b824f49b1.rlib: /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/slice-deque-0.3.0/src/lib.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/slice-deque-0.3.0/src/macros.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/slice-deque-0.3.0/src/mirrored/mod.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/slice-deque-0.3.0/src/mirrored/buffer.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/slice-deque-0.3.0/src/mirrored/macos.rs
+
+/Users/pc/Desktop/project/Audiora/target/debug/deps/slice_deque-e6febb4b824f49b1.d: /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/slice-deque-0.3.0/src/lib.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/slice-deque-0.3.0/src/macros.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/slice-deque-0.3.0/src/mirrored/mod.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/slice-deque-0.3.0/src/mirrored/buffer.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/slice-deque-0.3.0/src/mirrored/macos.rs
+
+/Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/slice-deque-0.3.0/src/lib.rs:
+/Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/slice-deque-0.3.0/src/macros.rs:
+/Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/slice-deque-0.3.0/src/mirrored/mod.rs:
+/Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/slice-deque-0.3.0/src/mirrored/buffer.rs:
+/Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/slice-deque-0.3.0/src/mirrored/macos.rs:
