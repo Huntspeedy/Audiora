@@ -1,0 +1,62 @@
+name: Rust CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Install Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+
+    - name: Install Dependencies
+      run: rustup component add clippy rustfmt
+
+    - name: Verify Formatting
+      run: cargo fmt -- --check
+
+    - name: Run Clippy
+      run: cargo clippy --all-targets -- -D warnings
+
+    - name: Build the Project
+      run: cargo build --release
+
+    - name: Run Tests
+      run: cargo test
+
+  run-project:
+    runs-on: ubuntu-latest
+    needs: build-and-test
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Install Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+
+    - name: Install Dependencies
+      run: rustup component add clippy rustfmt
+
+    - name: Build the Project
+      run: cargo build --release
+
+    - name: Run the Application
+      run: |
+        mkdir -p output
+        cargo run -- ./paths/sample.pdf
+
