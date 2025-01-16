@@ -1,7 +1,7 @@
 # Audiora - Text-to-Speech PDF Reader
 Audiora is a Rust-based application that converts text from a PDF document into speech. It extracts text from the PDF, splits it into smaller chunks, converts each chunk to an audio file, and plays it sequentially. This tool uses Google Text-to-Speech (GTTS) and the Rodio crate for audio playback.
 
-#Features
+Features
 PDF Text Extraction: Extracts text from PDF files.
 Text-to-Speech (TTS): Converts the extracted text into speech using Google’s Text-to-Speech.
 Audio Chunking: If a sentence is too long, it is broken into smaller chunks for better playback control.
@@ -10,35 +10,31 @@ Audio File Output: Saves the audio as .mp3 files in the output directory.
 Installation
 To run the Audiora application, you will need Rust and some dependencies. Follow these steps to install it:
 
-#1. Clone the repository:
+1. Clone the repository:
 **git clone https://github.com/your-username/audiora.git
 cd audiora**
 
-#2. Install Rust:
+2. Install Rust:
 If you haven't installed Rust yet, you can install it using the following command:
 
 
 **curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh**
 Make sure to follow the instructions to set up your Rust environment.
 
-#3. Install Dependencies:
+3. Install Dependencies:
 Once you have Rust set up, navigate to your project directory and run:
 
 **cargo build --release**
 This will download and compile the required dependencies.
 
-#Usage
+Usage
 Running the Application:
 To run the program, provide a path to the PDF file you want to convert:
 
 **cargo run -- <path_to_pdf>**
 This will extract the text from the provided PDF, convert it into speech, save it as .mp3 files, and play the audio.
 
-Example:
-bash
-Copy
-Edit
-cargo run -- example.pdf
+**cargo run -- example.pdf**
 This command will process example.pdf, save the audio files in the audio_output directory, and start playing them.
 
 Project Structure
