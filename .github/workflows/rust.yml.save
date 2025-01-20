@@ -1,0 +1,49 @@
+:clear
+
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up Rust
+      uses: actions/setup-rust@v1
+      with:
+        rust-version: 1.42.0  # Set your Rust version
+
+    - name: Install dependencies
+      run: |
+        rustup update
+        cargo build --release
+
+    - name: Run Tests
+      run: cargo test --release
+
+    - name: Run the Program (Optional)
+      run: |
+        cargo run -- <path_to_your_pdf>
+      # Replace with an actual path or set a default in the script if needed
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Deploy to Production (Optional)
+      run: |
+        echo "Deploying application..."
+        # Add commands to deploy your application or publish it if needed

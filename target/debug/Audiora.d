@@ -1,1 +1,1 @@
-/Users/pc/Desktop/project/Audiora/target/debug/Audiora: /Users/pc/Desktop/project/Audiora/src/main.rs
+/Users/pc/Desktop/project/target/debug/Audiora: /Users/pc/Desktop/project/src/main.rs

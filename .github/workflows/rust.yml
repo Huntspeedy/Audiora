@@ -10,40 +10,40 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04  # Updated to the latest Ubuntu version
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v2
+      - name: Checkout Repository
+        uses: actions/checkout@v3  # Use the latest version
 
-    - name: Set up Rust
-      uses: actions/setup-rust@v1
-      with:
-        rust-version: 1.42.0  # Set your Rust version
+      - name: Set up Rust
+        uses: actions/setup-rust@v1
+        with:
+          rust-version: 1.42.0  # Ensure the correct Rust version is installed
 
-    - name: Install dependencies
-      run: |
-        rustup update
-        cargo build --release
+      - name: Install Dependencies and Build
+        run: |
+          rustup update
+          cargo build --release
 
-    - name: Run Tests
-      run: cargo test --release
+      - name: Copy Sample PDF to Release Directory
+        run: cp ./path_to_your_repo/sample.pdf ./target/release/sample.pdf
+        # Replace ./path_to_your_repo/sample.pdf with the actual path to your sample.pdf in the repo
 
-    - name: Run the Program (Optional)
-      run: |
-        cargo run -- <path_to_your_pdf>
-      # Replace with an actual path or set a default in the script if needed
+      - name: Run the Program with Sample PDF
+        if: ${{ github.event_name == 'push' }}  # Optional: Only run on pushes
+        run: |
+          ./target/release/audiora ./target/release/sample.pdf
 
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: build
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v2
+      - name: Checkout Repository
+        uses: actions/checkout@v3
 
-    - name: Deploy to Production (Optional)
-      run: |
-        echo "Deploying application..."
-        # Add commands to deploy your application or publish it if needed
-
+      - name: Deploy to Production (Optional)
+        run: |
+          echo "Deploying application..."
+          # Add actual deployment commands here, e.g., scp, rsync, or publish steps

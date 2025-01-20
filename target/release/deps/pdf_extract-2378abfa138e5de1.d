@@ -1,0 +1,11 @@
+/Users/pc/Desktop/project/target/release/deps/libpdf_extract-2378abfa138e5de1.rmeta: /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pdf-extract-0.7.12/src/lib.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pdf-extract-0.7.12/src/core_fonts.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pdf-extract-0.7.12/src/glyphnames.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pdf-extract-0.7.12/src/zapfglyphnames.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pdf-extract-0.7.12/src/encodings.rs
+
+/Users/pc/Desktop/project/target/release/deps/libpdf_extract-2378abfa138e5de1.rlib: /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pdf-extract-0.7.12/src/lib.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pdf-extract-0.7.12/src/core_fonts.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pdf-extract-0.7.12/src/glyphnames.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pdf-extract-0.7.12/src/zapfglyphnames.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pdf-extract-0.7.12/src/encodings.rs
+
+/Users/pc/Desktop/project/target/release/deps/pdf_extract-2378abfa138e5de1.d: /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pdf-extract-0.7.12/src/lib.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pdf-extract-0.7.12/src/core_fonts.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pdf-extract-0.7.12/src/glyphnames.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pdf-extract-0.7.12/src/zapfglyphnames.rs /Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pdf-extract-0.7.12/src/encodings.rs
+
+/Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pdf-extract-0.7.12/src/lib.rs:
+/Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pdf-extract-0.7.12/src/core_fonts.rs:
+/Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pdf-extract-0.7.12/src/glyphnames.rs:
+/Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pdf-extract-0.7.12/src/zapfglyphnames.rs:
+/Users/pc/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pdf-extract-0.7.12/src/encodings.rs:
