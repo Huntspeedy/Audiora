@@ -1,10 +1,9 @@
-
 name: Release Statically Linked Rust Binary
 
 on:
   push:
     tags:
-      - 'v*'  # Trigger on tags like 'v1.0.0'
+      - 'v*'
 
 jobs:
   build:
@@ -12,8 +11,8 @@ jobs:
     strategy:
       matrix:
         target:
-          - x86_64-unknown-linux-musl       # Linux (musl)
-          - aarch64-unknown-linux-musl      # ARM Linux (musl)
+          - x86_64-unknown-linux-musl
+          - aarch64-unknown-linux-musl
 
     env:
       BINARY_NAME: Audiora
@@ -21,7 +20,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
+
       - name: Install System Dependencies
         run: sudo apt-get update && sudo apt-get install -y libasound2-dev pkg-config
 
@@ -34,29 +33,27 @@ jobs:
       - name: Install Target for Cross Compilation
         run: rustup target add ${{ matrix.target }}
 
+      - name: Debug Environment
+        run: |
+          echo "PKG_CONFIG_PATH: $PKG_CONFIG_PATH"
+          pkg-config --libs --cflags alsa || true
+          ls /usr/lib/pkgconfig
+
       - name: Build with Cross
+        env:
+          PKG_CONFIG_PATH: /usr/lib/pkgconfig:/usr/share/pkgconfig
         run: cross build --target ${{ matrix.target }} --release --verbose
 
       - name: Create Release Archive
         run: |
           mkdir -p release
-
-          if [[ "${{ matrix.target }}" == *"windows"* ]]; then
-            cp target/${{ matrix.target }}/release/$BINARY_NAME.exe release/
-            zip -r ${{ matrix.target }}.zip release
-          elif [[ "${{ matrix.target }}" == *"darwin"* ]]; then
-            cp target/${{ matrix.target }}/release/$BINARY_NAME release/
-            tar -czvf ${{ matrix.target }}.tar.gz -C release $BINARY_NAME
-          else
-            cp target/${{ matrix.target }}/release/$BINARY_NAME release/
-            tar -czvf ${{ matrix.target }}.tar.gz -C release $BINARY_NAME
-          fi
+          cp target/${{ matrix.target }}/release/$BINARY_NAME release/
+          tar -czvf ${{ matrix.target }}.tar.gz -C release $BINARY_NAME
 
       - name: Upload Release Assets
         uses: softprops/action-gh-release@v2
         with:
           files: |
             *.tar.gz
-            *.zip
         env:
           GITHUB_TOKEN: ${{ secrets.SSH_KEY }}
