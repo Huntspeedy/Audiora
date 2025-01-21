@@ -33,15 +33,15 @@ jobs:
       - name: Install Target for Cross Compilation
         run: rustup target add ${{ matrix.target }}
 
-      - name: Debug Environment
+      - name: Set PKG_CONFIG_PATH for Musl
         run: |
+          mkdir -p /usr/local/musl/lib/pkgconfig
+          export PKG_CONFIG_PATH=/usr/local/musl/lib/pkgconfig
           echo "PKG_CONFIG_PATH: $PKG_CONFIG_PATH"
-          pkg-config --libs --cflags alsa || true
-          ls /usr/lib/pkgconfig
 
       - name: Build with Cross
         env:
-          PKG_CONFIG_PATH: /usr/lib/pkgconfig:/usr/share/pkgconfig
+          PKG_CONFIG_PATH: /usr/local/musl/lib/pkgconfig
         run: cross build --target ${{ matrix.target }} --release --verbose
 
       - name: Create Release Archive
