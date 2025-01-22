@@ -35,10 +35,17 @@ jobs:
       - name: Install Target for Cross Compilation
         run: rustup target add ${{ matrix.target }}
 
+      - name: Set PKG_CONFIG_PATH for cross-compilation
+        run: echo "PKG_CONFIG_PATH=/usr/lib/pkgconfig:/usr/local/lib/pkgconfig" >> $GITHUB_ENV
+
+      - name: Debug pkg-config
+        run: |
+          echo "PKG_CONFIG_PATH=$PKG_CONFIG_PATH"
+          pkg-config --libs --cflags alsa || echo "alsa.pc not found"
+
       - name: Build with Cross
         env:
           PKG_CONFIG_ALLOW_CROSS: 1
-          PKG_CONFIG_PATH: /usr/lib/pkgconfig:/usr/local/lib/pkgconfig
         run: cross build --target ${{ matrix.target }} --release --verbose
 
       - name: Create Release Archive
