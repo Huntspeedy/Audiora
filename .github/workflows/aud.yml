@@ -30,10 +30,7 @@ jobs:
       - name: Install System Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y musl-tools libasound2-dev pkg-config
-
-      - name: Install Target for Cross Compilation
-        run: rustup target add ${{ matrix.target }}
+          sudo apt-get install -y musl-tools libasound2-dev pkg-config build-essential libssl-dev
 
       - name: Set PKG_CONFIG_PATH for cross-compilation
         run: echo "PKG_CONFIG_PATH=/usr/lib/pkgconfig:/usr/local/lib/pkgconfig" >> $GITHUB_ENV
@@ -42,6 +39,15 @@ jobs:
         run: |
           echo "PKG_CONFIG_PATH=$PKG_CONFIG_PATH"
           pkg-config --libs --cflags alsa || echo "alsa.pc not found"
+
+      - name: Check Installed Rust Toolchain
+        run: rustup show
+
+      - name: Set RUST_BACKTRACE for debugging
+        run: echo "RUST_BACKTRACE=1" >> $GITHUB_ENV
+
+      - name: Install Target for Cross Compilation
+        run: rustup target add ${{ matrix.target }}
 
       - name: Build with Cross
         env:
