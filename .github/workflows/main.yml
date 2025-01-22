@@ -27,22 +27,26 @@ jobs:
       - name: Install Cross
         run: cargo install cross
 
-      - name: Set Up musl Locally
+      - name: Set Up musl Locally on Desktop
         run: |
-          mkdir -p $HOME/musl
+          # Create a folder on the desktop to install musl
+          mkdir -p $HOME/Desktop/musl
+          
+          # Download and install musl to that folder
           curl -LO https://musl.libc.org/releases/musl-1.2.4.tar.gz
           tar -xzf musl-1.2.4.tar.gz
           cd musl-1.2.4
-          ./configure --prefix=$HOME/musl
+          ./configure --prefix=$HOME/Desktop/musl  # Install musl to Desktop folder
           make
           make install
 
       - name: Set Environment Variables for musl
         run: |
-          echo "PKG_CONFIG_PATH=$HOME/musl/lib/pkgconfig" >> $GITHUB_ENV
-          echo "PATH=$HOME/musl/bin:$PATH" >> $GITHUB_ENV
-          echo "CROSS_MUSL=$HOME/musl" >> $GITHUB_ENV  # Add musl path to CROSS_MUSL environment variable
-          echo "CROSS=$HOME/musl" >> $GITHUB_ENV  # Ensure cross uses this musl version
+          # Set the appropriate paths for musl
+          echo "PKG_CONFIG_PATH=$HOME/Desktop/musl/lib/pkgconfig" >> $GITHUB_ENV
+          echo "PATH=$HOME/Desktop/musl/bin:$PATH" >> $GITHUB_ENV
+          echo "CROSS_MUSL=$HOME/Desktop/musl" >> $GITHUB_ENV
+          echo "CROSS=$HOME/Desktop/musl" >> $GITHUB_ENV
 
       - name: Install Target for Cross Compilation
         run: rustup target add ${{ matrix.target }}
