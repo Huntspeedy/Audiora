@@ -37,19 +37,17 @@ jobs:
           make
           make install
 
+      - name: Verify Musl Installation
+        run: |
+          echo "Listing contents of $HOME/musl"
+          ls -l $HOME/musl
+
       - name: Set Environment Variables for musl
         run: |
-          echo "PKG_CONFIG_PATH=$HOME/musl/lib/pkgconfig" >> $GITHUB_ENV
-          echo "PATH=$HOME/musl/bin:$PATH" >> $GITHUB_ENV
-      
-      - name: Debug environment variables
-        run: |
+          export PKG_CONFIG_PATH=$HOME/musl/lib/pkgconfig
           echo "PKG_CONFIG_PATH=$PKG_CONFIG_PATH"
-          echo "PATH=$PATH"
-
-
-      - name: Install Target for Cross Compilation
-        run: rustup target add ${{ matrix.target }}
+          echo "PATH=$HOME/musl/bin:$PATH" >> $GITHUB_ENV
+          echo "PKG_CONFIG_PATH=$PKG_CONFIG_PATH" >> $GITHUB_ENV
 
       - name: Build with Cross
         run: cross build --target ${{ matrix.target }} --release --verbose
