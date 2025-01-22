@@ -27,31 +27,14 @@ jobs:
       - name: Install Cross
         run: cargo install cross
 
+      - name: Set up musl for cross-compilation
+        run: |
+          # Use cross to install musl and related tools
+          export TARGET=${{ matrix.target }}
+          cross build --target $TARGET --release --verbose
 
-
-      # - name: Set Up musl Locally (user-writable)
-      #   run: |
-      #     mkdir -p $HOME/musl
-      #     curl -LO https://musl.libc.org/releases/musl-1.2.4.tar.gz
-      #     tar -xzf musl-1.2.4.tar.gz
-      #     cd musl-1.2.4
-      #     ./configure --prefix=$HOME/musl
-      #     make
-      #     make install
-
-      # - name: Set Environment Variables for musl
-      #   run: |
-      #     echo "PKG_CONFIG_PATH=$HOME/musl/lib/pkgconfig" >> $GITHUB_ENV
-      #     echo "PATH=$HOME/musl/bin:$PATH" >> $GITHUB_ENV
-      
-      # - name: Debug environment variables
-      #   run: |
-      #     echo "PKG_CONFIG_PATH=$PKG_CONFIG_PATH"
-      #     echo "PATH=$PATH"
-
-
-      # - name: Install Target for Cross Compilation
-      #   run: rustup target add ${{ matrix.target }}
+      - name: Install Target for Cross Compilation
+        run: rustup target add ${{ matrix.target }}
 
       - name: Build with Cross
         run: cross build --target ${{ matrix.target }} --release --verbose
