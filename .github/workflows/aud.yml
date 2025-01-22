@@ -31,9 +31,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y musl-tools libasound2-dev pkg-config build-essential libssl-dev
-          # Explicitly install ALSA dependencies for cross-compilation
-          sudo apt-get install -y libasound2-dev:amd64  # x86_64 dependencies
-          sudo apt-get install -y libasound2-dev:arm64  # ARM (aarch64) dependencies
+          # Remove ARM specific package since it's not found in the repositories
+          # sudo apt-get install -y libasound2-dev:arm64  # Commented out, not necessary anymore
 
       - name: Set PKG_CONFIG_PATH for cross-compilation
         run: |
