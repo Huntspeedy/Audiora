@@ -1,12 +1,21 @@
+name: Release Statically Linked Rust Binary
+
+on:
+  push:
+    tags:
+      - 'v*'  # Trigger on tags like 'v1.0.0'
+
 jobs:
   build:
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         target:
-          - x86_64-unknown-linux-musl
-          - aarch64-unknown-linux-musl
+          - x86_64-unknown-linux-musl       # Linux (musl)
+          - aarch64-unknown-linux-musl      # ARM Linux (musl)
+
+    env:
+      BINARY_NAME: Audiora
 
     steps:
       - name: Checkout code
@@ -18,5 +27,59 @@ jobs:
       - name: Install Cross
         run: cargo install cross
 
+      - name: Install pkg-config and dependencies
+          run: |
+            sudo apt-get update
+            sudo apt-get install -y pkg-config
+
+
+      # - name: Set Up musl Locally (user-writable)
+      #   run: |
+      #     mkdir -p $HOME/musl
+      #     curl -LO https://musl.libc.org/releases/musl-1.2.4.tar.gz
+      #     tar -xzf musl-1.2.4.tar.gz
+      #     cd musl-1.2.4
+      #     ./configure --prefix=$HOME/musl
+      #     make
+      #     make install
+
+      # - name: Set Environment Variables for musl
+      #   run: |
+      #     echo "PKG_CONFIG_PATH=$HOME/musl/lib/pkgconfig" >> $GITHUB_ENV
+      #     echo "PATH=$HOME/musl/bin:$PATH" >> $GITHUB_ENV
+      
+      # - name: Debug environment variables
+      #   run: |
+      #     echo "PKG_CONFIG_PATH=$PKG_CONFIG_PATH"
+      #     echo "PATH=$PATH"
+
+
+      # - name: Install Target for Cross Compilation
+      #   run: rustup target add ${{ matrix.target }}
+
       - name: Build with Cross
-        run: cross build --target ${{ matrix.target }} --release
+        run: cross build --target ${{ matrix.target }} --release --verbose
+
+      - name: Create Release Archive
+        run: |
+          mkdir -p release
+
+          if [[ "${{ matrix.target }}" == *"windows"* ]]; then
+            cp target/${{ matrix.target }}/release/$BINARY_NAME.exe release/
+            zip -r ${{ matrix.target }}.zip release
+          elif [[ "${{ matrix.target }}" == *"darwin"* ]]; then
+            cp target/${{ matrix.target }}/release/$BINARY_NAME release/
+            tar -czvf ${{ matrix.target }}.tar.gz -C release $BINARY_NAME
+          else
+            cp target/${{ matrix.target }}/release/$BINARY_NAME release/
+            tar -czvf ${{ matrix.target }}.tar.gz -C release $BINARY_NAME
+          fi
+
+      - name: Upload Release Assets
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            *.tar.gz
+            *.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.AUDI_TOKEN }}
