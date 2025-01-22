@@ -27,7 +27,7 @@ jobs:
 
       - name: Install Cross
         run: cargo install cross
-        - name: Set Up musl Locally
+      - name: Set Up musl Locally
         run: |
           mkdir -p $HOME/musl
           curl -LO https://musl.libc.org/releases/musl-1.2.4.tar.gz
