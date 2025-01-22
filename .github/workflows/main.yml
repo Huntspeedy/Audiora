@@ -41,6 +41,12 @@ jobs:
         run: |
           echo "PKG_CONFIG_PATH=$HOME/musl/lib/pkgconfig" >> $GITHUB_ENV
           echo "PATH=$HOME/musl/bin:$PATH" >> $GITHUB_ENV
+      
+      - name: Debug environment variables
+        run: |
+          echo "PKG_CONFIG_PATH=$PKG_CONFIG_PATH"
+          echo "PATH=$PATH"
+
 
       - name: Install Target for Cross Compilation
         run: rustup target add ${{ matrix.target }}
