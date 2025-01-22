@@ -31,12 +31,14 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y musl-tools libasound2-dev pkg-config build-essential libssl-dev
+          # Explicitly install ALSA dependencies for cross-compilation
+          sudo apt-get install -y libasound2-dev:amd64  # x86_64 dependencies
+          sudo apt-get install -y libasound2-dev:arm64  # ARM (aarch64) dependencies
 
       - name: Set PKG_CONFIG_PATH for cross-compilation
         run: |
-          echo "PKG_CONFIG_PATH=/usr/lib/pkgconfig:/usr/local/lib/pkgconfig" >> $GITHUB_ENV
-          echo "PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/local/lib/pkgconfig" >> $GITHUB_ENV
-          echo "PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig:/usr/local/lib/pkgconfig" >> $GITHUB_ENV
+          # Set PKG_CONFIG_PATH for both x86_64 and aarch64 targets
+          echo "PKG_CONFIG_PATH=/usr/lib/pkgconfig:/usr/local/lib/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/lib/aarch64-linux-gnu/pkgconfig" >> $GITHUB_ENV
 
       - name: Debug pkg-config for ALSA
         run: |
@@ -55,6 +57,7 @@ jobs:
       - name: Build with Cross
         env:
           PKG_CONFIG_ALLOW_CROSS: 1
+          ALSA_STATIC: 1  # Build ALSA statically to avoid pkg-config issues
         run: cross build --target ${{ matrix.target }} --release --verbose
 
       - name: Create Release Archive
