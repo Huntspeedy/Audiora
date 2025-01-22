@@ -1,4 +1,3 @@
-
 name: Release Statically Linked Rust Binary
 
 on:
@@ -8,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest  # Use Linux runner for easier musl support
     strategy:
       matrix:
         target:
@@ -21,16 +20,18 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
 
+      - name: Install musl-cross toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y musl-tools
+          rustup target add ${{ matrix.target }}
+
       - name: Install Cross
         run: cargo install cross
-
-      - name: Install Target for Cross Compilation
-        run: rustup target add ${{ matrix.target }}
 
       - name: Build with Cross
         run: cross build --target ${{ matrix.target }} --release --verbose
@@ -38,7 +39,6 @@ jobs:
       - name: Create Release Archive
         run: |
           mkdir -p release
-
           if [[ "${{ matrix.target }}" == *"windows"* ]]; then
             cp target/${{ matrix.target }}/release/$BINARY_NAME.exe release/
             zip -r ${{ matrix.target }}.zip release
@@ -54,7 +54,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            *.tar.gz
-            *.zip
+            release/*.tar.gz
+            release/*.zip
         env:
-          GITHUB_TOKEN: ${{ secrets.SSH_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
