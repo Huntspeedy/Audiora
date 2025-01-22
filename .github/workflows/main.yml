@@ -1,3 +1,4 @@
+
 name: Release Statically Linked Rust Binary
 
 on:
@@ -26,23 +27,6 @@ jobs:
 
       - name: Install Cross
         run: cargo install cross
-
-      - name: Set up musl in user-writable directory
-        run: |
-          # Set up musl in the home directory (user-writable path)
-          mkdir -p $HOME/musl
-          curl -LO https://musl.libc.org/releases/musl-1.2.4.tar.gz
-          tar -xzf musl-1.2.4.tar.gz
-          cd musl-1.2.4
-          ./configure --prefix=$HOME/musl
-          make
-          make install
-
-      - name: Set Environment Variables for musl
-        run: |
-          # Set the environment variables to use the musl installation in the home directory
-          echo "PKG_CONFIG_PATH=$HOME/musl/lib/pkgconfig" >> $GITHUB_ENV
-          echo "PATH=$HOME/musl/bin:$PATH" >> $GITHUB_ENV
 
       - name: Install Target for Cross Compilation
         run: rustup target add ${{ matrix.target }}
