@@ -28,22 +28,6 @@ jobs:
       - name: Install Cross
         run: cargo install cross
 
-      - name: Set Up musl Locally
-        run: |
-          mkdir -p $HOME/musl
-          curl -LO https://musl.libc.org/releases/musl-1.2.4.tar.gz
-          tar -xzf musl-1.2.4.tar.gz
-          cd musl-1.2.4
-          ./configure --prefix=$HOME/musl
-          make
-          make install
-
-      - name: Set Environment Variables for musl
-        run: |
-          echo "PKG_CONFIG_PATH=$HOME/musl/lib/pkgconfig" >> $GITHUB_ENV
-          echo "PATH=$HOME/musl/bin:$PATH" >> $GITHUB_ENV
-
-
       - name: Install Target for Cross Compilation
         run: rustup target add ${{ matrix.target }}
 
@@ -72,4 +56,4 @@ jobs:
             *.tar.gz
             *.zip
         env:
-          GITHUB_TOKEN: ${{ secrets.SSH_KEY }}
+          GITHUB_TOKEN: ${{ secrets.AUDI_TOKEN }}
