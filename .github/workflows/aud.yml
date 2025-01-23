@@ -20,6 +20,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - run: sudo apt-get install -yqq alsa
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
