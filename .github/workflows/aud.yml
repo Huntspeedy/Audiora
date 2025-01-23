@@ -28,6 +28,10 @@ jobs:
       - name: Install Cross
         run: cargo install cross
 
+      - name: Install ALSA Development Files
+        run: sudo apt-get install -y libasound2-dev:amd64
+
+
       - name: Install System Dependencies
         run: |
           sudo apt-get update
