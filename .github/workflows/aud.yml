@@ -10,25 +10,21 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        target:
-          - x86_64-unknown-linux-musl
-          - aarch64-unknown-linux-musl
-
-    env:
-      BINARY_NAME: Audiora
-      RUSTFLAGS: "-C target-feature=+crt-static"
+        target: [x86_64-unknown-linux-musl, aarch64-unknown-linux-musl]
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          target: ${{ matrix.target }}
+          override: true
 
-      - name: Install Cross
-        run: cargo install cross
-
-      - name: Install Basic Dependencies
+      - name: Install dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y \
@@ -38,14 +34,16 @@ jobs:
             libssl-dev \
             poppler-utils
 
-      - name: Build with Cross
-        run: cross build --target ${{ matrix.target }} --release
+      - name: Build
+        run: |
+          cargo build --target ${{ matrix.target }} --release
+          ! cargo tree -d | grep alsa  # Verify no ALSA
 
       - name: Create Release Archive
         run: |
           mkdir -p release
-          cp target/${{ matrix.target }}/release/$BINARY_NAME release/
-          tar -czvf ${{ matrix.target }}.tar.gz -C release $BINARY_NAME
+          cp target/${{ matrix.target }}/release/Audiora release/
+          tar -czvf ${{ matrix.target }}.tar.gz -C release Audiora
 
       - name: Upload Release Assets
         uses: softprops/action-gh-release@v2
