@@ -27,29 +27,19 @@ jobs:
       - name: Install Cross
         run: cargo install cross
 
-      - name: Install System Dependencies
+      - name: Install Basic Dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y \
             musl-tools \
-            libasound2-dev \
             pkg-config \
             build-essential \
             libssl-dev \
-            poppler-utils \
-            cmake \
-            linux-headers-generic
-
-      - name: Set Environment Variables
-        run: |
-          echo "PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig" >> $GITHUB_ENV
-          echo "RUSTFLAGS=-C target-feature=+crt-static" >> $GITHUB_ENV
-          echo "ALSA_STATIC=1" >> $GITHUB_ENV
+            poppler-utils
 
       - name: Build with Cross
         env:
-          PKG_CONFIG_ALLOW_CROSS: 1
-          PKG_CONFIG_PATH: /usr/lib/x86_64-linux-gnu/pkgconfig
+          RUSTFLAGS: "-C target-feature=+crt-static"
         run: cross build --target ${{ matrix.target }} --release
 
       - name: Create Release Archive
