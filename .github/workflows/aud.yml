@@ -37,25 +37,19 @@ jobs:
             build-essential \
             libssl-dev \
             poppler-utils \
-            cmake
+            cmake \
+            linux-headers-generic
 
-      - name: Build ALSA for musl
-        if: contains(matrix.target, 'musl')
+      - name: Set Environment Variables
         run: |
-          wget https://www.alsa-project.org/files/pub/lib/alsa-lib-1.2.10.tar.bz2
-          tar xjf alsa-lib-1.2.10.tar.bz2
-          cd alsa-lib-1.2.10
-          ./configure --prefix=/usr/local/musl --host=x86_64-linux-musl --disable-python
-          make
-          sudo make install
-          echo "/usr/local/musl/lib" | sudo tee /etc/ld.so.conf.d/musl.conf
-          sudo ldconfig
+          echo "PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig" >> $GITHUB_ENV
+          echo "RUSTFLAGS=-C target-feature=+crt-static" >> $GITHUB_ENV
+          echo "ALSA_STATIC=1" >> $GITHUB_ENV
 
       - name: Build with Cross
         env:
           PKG_CONFIG_ALLOW_CROSS: 1
-          PKG_CONFIG_PATH: /usr/local/musl/lib/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig
-          RUSTFLAGS: "-C target-feature=+crt-static"
+          PKG_CONFIG_PATH: /usr/lib/x86_64-linux-gnu/pkgconfig
         run: cross build --target ${{ matrix.target }} --release
 
       - name: Create Release Archive
