@@ -5,9 +5,9 @@ edition = "2021"
 
 [dependencies]
 clap = { version = "4.0", features = ["derive"] }
-docx-rs = "0.4.18-rc19"
+docx-rs = "0.4.18-rc19" 
 pdf-extract = "0.7.12"
 tts_rust = "0.3.5"
-rodio = { version = "0.20.1", default-features = false, features = ["pulseaudio"] }
+rodio = "0.20.1"  # Using default ALSA backend
 minimp3 = "0.5.1"
 tokio = { version = "1.42.0", features = ["full"] }
