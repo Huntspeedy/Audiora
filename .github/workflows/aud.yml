@@ -37,19 +37,7 @@ jobs:
             build-essential \
             libssl-dev \
             poppler-utils \
-            cmake \
-            libasound2-dev
-
-      - name: Configure Rodio for PulseAudio
-        run: |
-          echo "[target.${{ matrix.target }}.dependencies.rodio]" >> Cargo.toml
-          echo "features = [\"pulseaudio\"]" >> Cargo.toml
-          echo "default-features = false" >> Cargo.toml
-
-      - name: Set Environment Variables
-        run: |
-          echo "PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig" >> $GITHUB_ENV
-          echo "RUSTFLAGS=-C target-feature=+crt-static" >> $GITHUB_ENV
+            cmake
 
       - name: Build with Cross
         env:
