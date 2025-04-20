@@ -3,47 +3,68 @@ name: Release Statically Linked Rust Binary
 on:
   push:
     tags:
-      - 'v*'
+      - 'v*'  # Trigger on tags like 'v1.0.0'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        target: [x86_64-unknown-linux-musl, aarch64-unknown-linux-musl]
+        target:
+          - x86_64-unknown-linux-musl       # Linux (musl)
+          - aarch64-unknown-linux-musl      # ARM Linux (musl)
+
+    env:
+      BINARY_NAME: Audiora
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Install Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: stable
-          target: ${{ matrix.target }}
-          override: true
+        uses: dtolnay/rust-toolchain@stable
 
-      - name: Install dependencies
+      - name: Install Cross
+        run: cargo install cross
+
+      - name: Install System Dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y \
             musl-tools \
+            libpulse-dev \
             pkg-config \
             build-essential \
             libssl-dev \
-            poppler-utils
+            poppler-utils \
+            libasound2-dev \
+            cmake
 
-      - name: Build
+      - name: Set PKG_CONFIG_PATH for cross-compilation
         run: |
-          cargo build --target ${{ matrix.target }} --release
-          ! cargo tree -d | grep alsa  # Verify no ALSA
+          echo "PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/lib/x86_64-linux-musl/lib/pkgconfig" >> $GITHUB_ENV
+
+      - name: Debug pkg-config
+        run: |
+          echo "PKG_CONFIG_PATH=$PKG_CONFIG_PATH"
+          pkg-config --libs --cflags libpulse || echo "pulse.pc not found"
+          pkg-config --libs --cflags poppler-glib || echo "poppler-glib.pc not found"
+
+      - name: Install Target for Cross Compilation
+        run: rustup target add ${{ matrix.target }}
+
+      - name: Build with Cross
+        env:
+          PKG_CONFIG_ALLOW_CROSS: 1
+          PKG_CONFIG_PATH: /usr/lib/x86_64-linux-gnu/pkgconfig
+          RUSTFLAGS: "-C target-feature=+crt-static"
+        run: cross build --target ${{ matrix.target }} --release --verbose
 
       - name: Create Release Archive
         run: |
           mkdir -p release
-          cp target/${{ matrix.target }}/release/Audiora release/
-          tar -czvf ${{ matrix.target }}.tar.gz -C release Audiora
+          cp target/${{ matrix.target }}/release/$BINARY_NAME release/
+          tar -czvf ${{ matrix.target }}.tar.gz -C release $BINARY_NAME
 
       - name: Upload Release Assets
         uses: softprops/action-gh-release@v2
