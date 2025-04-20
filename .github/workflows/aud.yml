@@ -16,6 +16,7 @@ jobs:
 
     env:
       BINARY_NAME: Audiora
+      RUSTFLAGS: "-C target-feature=+crt-static"
 
     steps:
       - name: Checkout code
@@ -38,8 +39,6 @@ jobs:
             poppler-utils
 
       - name: Build with Cross
-        env:
-          RUSTFLAGS: "-C target-feature=+crt-static"
         run: cross build --target ${{ matrix.target }} --release
 
       - name: Create Release Archive

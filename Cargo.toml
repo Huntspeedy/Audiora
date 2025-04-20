@@ -7,8 +7,13 @@ edition = "2021"
 clap = { version = "4.0", features = ["derive"] }
 docx-rs = "0.4.18-rc19"
 pdf-extract = "0.7.12"
-tts_rust = "0.3.5"
-cpal = "0.15"
+# Replace tts_rust with a pure Rust alternative
+tts-rs = { version = "0.6.0", default-features = false }  # Pure Rust TTS
+cpal = "0.15"  # Pure Rust audio playback
+symphonia = { version = "0.5", features = ["mp3"] }  # Pure Rust audio decoding
 minimp3 = "0.5.1"
 tokio = { version = "1.42.0", features = ["full"] }
-symphonia = { version = "0.5", features = ["mp3"] }  # For MP3 decoding
+
+# Explicitly block alsa-sys if it's still being pulled in
+[patch.crates-io]
+alsa-sys = { version = "0.3.1", optional = true }
