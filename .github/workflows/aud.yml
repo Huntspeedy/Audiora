@@ -20,7 +20,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - run: sudo apt-get install -yqq alsa
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -28,31 +27,28 @@ jobs:
       - name: Install Cross
         run: cargo install cross
 
-      - name: Install ALSA Development Files
-        run: sudo apt-get install -y libasound2-dev:amd64
-
-
       - name: Install System Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y musl-tools libasound2-dev pkg-config build-essential libssl-dev
-          # Ensure pkg-config for ALSA is installed for ARM targets
-          sudo apt-get install -y pkg-config
+          sudo apt-get install -y \
+            musl-tools \
+            libpulse-dev \
+            pkg-config \
+            build-essential \
+            libssl-dev \
+            poppler-utils \
+            libasound2-dev \
+            cmake
 
       - name: Set PKG_CONFIG_PATH for cross-compilation
         run: |
           echo "PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/lib/x86_64-linux-musl/lib/pkgconfig" >> $GITHUB_ENV
 
-      - name: Debug pkg-config for ALSA
+      - name: Debug pkg-config
         run: |
           echo "PKG_CONFIG_PATH=$PKG_CONFIG_PATH"
-          pkg-config --libs --cflags alsa || echo "alsa.pc not found"
-
-      - name: Check Installed Rust Toolchain
-        run: rustup show
-
-      - name: Set RUST_BACKTRACE for debugging
-        run: echo "RUST_BACKTRACE=1" >> $GITHUB_ENV
+          pkg-config --libs --cflags libpulse || echo "pulse.pc not found"
+          pkg-config --libs --cflags poppler-glib || echo "poppler-glib.pc not found"
 
       - name: Install Target for Cross Compilation
         run: rustup target add ${{ matrix.target }}
@@ -60,29 +56,20 @@ jobs:
       - name: Build with Cross
         env:
           PKG_CONFIG_ALLOW_CROSS: 1
-          ALSA_STATIC: 1  # Build ALSA statically to avoid pkg-config issues
+          PKG_CONFIG_PATH: /usr/lib/x86_64-linux-gnu/pkgconfig
+          RUSTFLAGS: "-C target-feature=+crt-static"
         run: cross build --target ${{ matrix.target }} --release --verbose
 
       - name: Create Release Archive
         run: |
           mkdir -p release
-
-          if [[ "${{ matrix.target }}" == *"windows"* ]]; then
-            cp target/${{ matrix.target }}/release/$BINARY_NAME.exe release/
-            zip -r ${{ matrix.target }}.zip release
-          elif [[ "${{ matrix.target }}" == *"darwin"* ]]; then
-            cp target/${{ matrix.target }}/release/$BINARY_NAME release/
-            tar -czvf ${{ matrix.target }}.tar.gz -C release $BINARY_NAME
-          else
-            cp target/${{ matrix.target }}/release/$BINARY_NAME release/
-            tar -czvf ${{ matrix.target }}.tar.gz -C release $BINARY_NAME
-          fi
+          cp target/${{ matrix.target }}/release/$BINARY_NAME release/
+          tar -czvf ${{ matrix.target }}.tar.gz -C release $BINARY_NAME
 
       - name: Upload Release Assets
         uses: softprops/action-gh-release@v2
         with:
           files: |
             *.tar.gz
-            *.zip
         env:
           GITHUB_TOKEN: ${{ secrets.AUDI_TOKEN }}
