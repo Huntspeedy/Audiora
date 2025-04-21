@@ -10,4 +10,3 @@ pdf-extract = "0.7.12"
 tts_rust = { version = "0.3.5", default-features = false }
 tokio = { version = "1.42.0", features = ["full"] }
 
-
