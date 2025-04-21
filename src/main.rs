@@ -2,9 +2,7 @@ use std::env;
 use std::fs;
 use std::io::{self, Read};
 use pdf_extract::extract_text_from_mem;
-use tts_rust::tts::GTTSClient;
-use tts_rust::languages::Languages;
-use std::sync::Arc;
+use gtts::save_to_file; // Use gtts crate function
 use std::time::Duration;
 
 #[derive(Debug)]
@@ -67,12 +65,6 @@ async fn text_to_audio_to_file(
     filename: &str,
     chunk_size: usize,
 ) -> Result<(), AudioraError> {
-    let narrator = Arc::new(GTTSClient {
-        volume: 1.0,
-        language: Languages::English,
-        tld: "com",
-    });
-
     let output_dir = "audio_output";
     fs::create_dir_all(output_dir).map_err(|e| {
         AudioraError::IoError(io::Error::new(
@@ -92,8 +84,8 @@ async fn text_to_audio_to_file(
             let chunk_str: String = chunk.iter().collect();
             let chunk_filename = format!("{}/{}_chunk_{}.mp3", output_dir, filename, chunk_index);
 
-            if let Err(e) = narrator.save_to_file(&chunk_str, &chunk_filename) {
-                eprintln!("Error saving chunk {}: {}", chunk_index, e);
+            if !save_to_file(&chunk_str, &chunk_filename) {
+                eprintln!("Error saving chunk {}.", chunk_index);
                 continue;
             }
 
