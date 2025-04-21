@@ -2,7 +2,7 @@ name: Release Statically Linked Rust Binary
 
 on:
   push:
-    branches:
+    tags:
       - 'v*'  # Trigger on tags like 'v1.0.0'
 
 jobs:
