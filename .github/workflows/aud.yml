@@ -32,33 +32,23 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y \
             musl-tools \
-            libpulse-dev \
             pkg-config \
             build-essential \
             libssl-dev \
-            poppler-utils \
             libasound2-dev \
             cmake
 
-      - name: Set PKG_CONFIG_PATH for cross-compilation
+      - name: Install Targets for Cross Compilation
         run: |
-          echo "PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/lib/x86_64-linux-musl/lib/pkgconfig" >> $GITHUB_ENV
-
-      - name: Debug pkg-config
-        run: |
-          echo "PKG_CONFIG_PATH=$PKG_CONFIG_PATH"
-          pkg-config --libs --cflags libpulse || echo "pulse.pc not found"
-          pkg-config --libs --cflags poppler-glib || echo "poppler-glib.pc not found"
-
-      - name: Install Target for Cross Compilation
-        run: rustup target add ${{ matrix.target }}
+          rustup target add x86_64-unknown-linux-musl
+          rustup target add aarch64-unknown-linux-musl
 
       - name: Build with Cross
         env:
           PKG_CONFIG_ALLOW_CROSS: 1
-          PKG_CONFIG_PATH: /usr/lib/x86_64-linux-gnu/pkgconfig
           RUSTFLAGS: "-C target-feature=+crt-static"
-        run: cross build --target ${{ matrix.target }} --release --verbose
+        run: |
+          cross build --target ${{ matrix.target }} --release --verbose
 
       - name: Create Release Archive
         run: |
