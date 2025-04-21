@@ -21,6 +21,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Clean Cargo Cache
+        run: cargo clean
+
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
 
