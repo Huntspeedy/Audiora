@@ -1,10 +1,9 @@
 use std::env;
 use std::fs;
-use std::io::{self, Read, BufReader};
+use std::io::{self, Read};
 use pdf_extract::extract_text_from_mem;
 use tts_rust::tts::GTTSClient;
 use tts_rust::languages::Languages;
-use rodio::{OutputStream, OutputStreamHandle, Sink};
 use tokio::sync::mpsc;
 use std::sync::Arc;
 use std::time::Duration;
@@ -50,15 +49,13 @@ fn split_into_sentences(text: &str) -> Vec<String> {
     let mut start = 0;
 
     for (i, c) in text.char_indices() {
-        // Check for sentence-ending punctuation
         if c == '.' || c == '!' || c == '?' {
-            let sentence = &text[start..=i]; // Include punctuation mark
+            let sentence = &text[start..=i];
             sentences.push(sentence.trim().to_string());
-            start = i + 1; // Skip past the punctuation
+            start = i + 1;
         }
     }
 
-    // Push the remaining part of the text if any
     if start < text.len() {
         sentences.push(text[start..].trim().to_string());
     }
@@ -66,11 +63,10 @@ fn split_into_sentences(text: &str) -> Vec<String> {
     sentences
 }
 
-async fn text_to_audio_to_file_and_play(
+async fn text_to_audio_to_file(
     text: &str,
     filename: &str,
     chunk_size: usize,
-    audio_sender: mpsc::Sender<String>,
 ) -> Result<(), AudioraError> {
     let narrator = Arc::new(GTTSClient {
         volume: 1.0,
@@ -91,64 +87,24 @@ async fn text_to_audio_to_file_and_play(
 
     for sentence in sentences {
         let sentence_chars: Vec<_> = sentence.chars().collect();
-        
-        // If the sentence is too long, break it into smaller chunks
-        let mut chunks = sentence_chars.chunks(chunk_size);
-        while let Some(chunk) = chunks.next() {
+        let chunks = sentence_chars.chunks(chunk_size);
+
+        for chunk in chunks {
             let chunk_str: String = chunk.iter().collect();
             let chunk_filename = format!("{}/{}_chunk_{}.mp3", output_dir, filename, chunk_index);
 
-            // Save the audio to a file
             if let Err(e) = narrator.save_to_file(&chunk_str, &chunk_filename) {
                 eprintln!("Error saving chunk {}: {}", chunk_index, e);
                 continue;
             }
 
-            // Send the filename to the playback task
-            audio_sender.send(chunk_filename).await.map_err(|e| {
-                AudioraError::IoError(io::Error::new(
-                    io::ErrorKind::Other,
-                    format!("Failed to send chunk {}: {}", chunk_index, e),
-                ))
-            })?;
+            println!("Saved chunk {} to file: {}", chunk_index, chunk_filename);
 
-            println!("Successfully sent chunk {} to the receiver.", chunk_index);
             chunk_index += 1;
 
-            // Add a slight pause for smoother transitions between chunks
             tokio::time::sleep(Duration::from_millis(300)).await;
         }
     }
-
-    Ok(())
-}
-
-async fn play_audio_concurrently(
-    mut receiver: mpsc::Receiver<String>,
-    stream_handle: OutputStreamHandle,
-) -> Result<(), AudioraError> {
-    let sink = Sink::try_new(&stream_handle).unwrap();
-
-    while let Some(file_path) = receiver.recv().await {
-        println!("Received audio file path: {}", file_path);
-        let file = fs::File::open(file_path).map_err(|e| {
-            AudioraError::IoError(io::Error::new(
-                io::ErrorKind::Other,
-                format!("Failed to open audio file: {}", e),
-            ))
-        })?;
-        let source = rodio::Decoder::new(BufReader::new(file)).map_err(|e| {
-            AudioraError::IoError(io::Error::new(
-                io::ErrorKind::Other,
-                format!("Failed to decode audio: {}", e),
-            ))
-        })?;
-
-        sink.append(source);
-    }
-
-    println!("Finished playing all audio.");
-    sink.sleep_until_end();
 
     Ok(())
 }
@@ -164,12 +120,6 @@ async fn main() {
     let pdf_path = &args[1];
     println!("Running with PDF path: {}", pdf_path);
 
-    let (audio_sender, audio_receiver) = mpsc::channel(100);
-
-    let (_stream, stream_handle) = OutputStream::try_default().unwrap();
-
-    let playback_handle = tokio::spawn(play_audio_concurrently(audio_receiver, stream_handle));
-
     match extract_text_from_pdf(pdf_path).await {
         Ok(text) => {
             println!("Extracted text:\n{}", text);
@@ -180,14 +130,10 @@ async fn main() {
             }
 
             let output_file_base = "output_audio";
-            if let Err(e) = text_to_audio_to_file_and_play(&text, output_file_base, 100, audio_sender).await {
-                eprintln!("Audio conversion or playback error: {}", e);
+            if let Err(e) = text_to_audio_to_file(&text, output_file_base, 100).await {
+                eprintln!("Audio conversion error: {}", e);
             }
         }
         Err(e) => eprintln!("Error: {}", e),
-    }
-
-    if let Err(e) = playback_handle.await {
-        eprintln!("Error in playback task: {}", e);
     }
 }
