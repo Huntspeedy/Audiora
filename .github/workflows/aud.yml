@@ -18,52 +18,41 @@ jobs:
       BINARY_NAME: Audiora
 
     steps:
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install Rust Toolchain
+      - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
 
       - name: Install Cross
         run: cargo install cross
 
-      - name: Install System Dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            musl-tools \
-            libssl-dev \
-            pkg-config \
-            poppler-utils \
-            build-essential \
-            cmake
-
-      - name: Set PKG_CONFIG_PATH
-        run: |
-          echo "PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig" >> $GITHUB_ENV
-
-      - name: Add Cross Compilation Targets
+      - name: Install Target for Cross Compilation
         run: rustup target add ${{ matrix.target }}
 
-      - name: Build Statically Linked Binary
-        env:
-          PKG_CONFIG_ALLOW_CROSS: 1
-          RUSTFLAGS: "-C target-feature=+crt-static"
+      - name: Build with Cross
         run: cross build --target ${{ matrix.target }} --release --verbose
 
-      - name: Strip Binary (Optional but Recommended)
-        run: strip target/${{ matrix.target }}/release/$BINARY_NAME
-
-      - name: Package Release
+      - name: Create Release Archive
         run: |
           mkdir -p release
-          cp target/${{ matrix.target }}/release/$BINARY_NAME release/
-          tar -czvf ${{ matrix.target }}.tar.gz -C release $BINARY_NAME
+
+          if [[ "${{ matrix.target }}" == *"windows"* ]]; then
+            cp target/${{ matrix.target }}/release/$BINARY_NAME.exe release/
+            zip -r ${{ matrix.target }}.zip release
+          elif [[ "${{ matrix.target }}" == *"darwin"* ]]; then
+            cp target/${{ matrix.target }}/release/$BINARY_NAME release/
+            tar -czvf ${{ matrix.target }}.tar.gz -C release $BINARY_NAME
+          else
+            cp target/${{ matrix.target }}/release/$BINARY_NAME release/
+            tar -czvf ${{ matrix.target }}.tar.gz -C release $BINARY_NAME
+          fi
 
       - name: Upload Release Assets
         uses: softprops/action-gh-release@v2
         with:
           files: |
             *.tar.gz
+            *.zip
         env:
           GITHUB_TOKEN: ${{ secrets.AUDI_TOKEN }}
