@@ -3,7 +3,7 @@ name: Release Statically Linked Rust Binary
 on:
   push:
     tags:
-      - 'v*'  # Trigger on tags like 'v1.0.0'
+      - 'v*'  # Only trigger on version tags like v1.0.0
 
 jobs:
   build:
@@ -11,17 +11,17 @@ jobs:
     strategy:
       matrix:
         target:
-          - x86_64-unknown-linux-musl       # Linux (musl)
-          - aarch64-unknown-linux-musl      # ARM Linux (musl)
+          - x86_64-unknown-linux-musl
+          - aarch64-unknown-linux-musl
 
     env:
       BINARY_NAME: Audiora
 
     steps:
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Install Rust
+      - name: Install Rust Toolchain
         uses: dtolnay/rust-toolchain@stable
 
       - name: Install Cross
@@ -32,25 +32,30 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y \
             musl-tools \
-            pkg-config \
-            build-essential \
             libssl-dev \
+            pkg-config \
+            poppler-utils \
             libasound2-dev \
+            build-essential \
             cmake
 
-      - name: Install Targets for Cross Compilation
+      - name: Set PKG_CONFIG_PATH
         run: |
-          rustup target add x86_64-unknown-linux-musl
-          rustup target add aarch64-unknown-linux-musl
+          echo "PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig" >> $GITHUB_ENV
 
-      - name: Build with Cross
+      - name: Add Cross Compilation Targets
+        run: rustup target add ${{ matrix.target }}
+
+      - name: Build Statically Linked Binary
         env:
           PKG_CONFIG_ALLOW_CROSS: 1
           RUSTFLAGS: "-C target-feature=+crt-static"
-        run: |
-          cross build --target ${{ matrix.target }} --release --verbose
+        run: cross build --target ${{ matrix.target }} --release --verbose
 
-      - name: Create Release Archive
+      - name: Strip Binary (Optional but Recommended)
+        run: strip target/${{ matrix.target }}/release/$BINARY_NAME
+
+      - name: Package Release
         run: |
           mkdir -p release
           cp target/${{ matrix.target }}/release/$BINARY_NAME release/
