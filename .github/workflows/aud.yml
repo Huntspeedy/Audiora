@@ -2,8 +2,8 @@ name: Release Statically Linked Rust Binary
 
 on:
   push:
-    tags:
-      - 'v*'  # Only trigger on version tags like v1.0.0
+    branches:
+      - main  # triggers on every push to main branch
 
 jobs:
   build:
@@ -35,7 +35,6 @@ jobs:
             libssl-dev \
             pkg-config \
             poppler-utils \
-            libasound2-dev \
             build-essential \
             cmake
 
