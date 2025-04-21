@@ -4,7 +4,6 @@ use std::io::{self, Read};
 use pdf_extract::extract_text_from_mem;
 use tts_rust::tts::GTTSClient;
 use tts_rust::languages::Languages;
-use tokio::sync::mpsc;
 use std::sync::Arc;
 use std::time::Duration;
 
