@@ -7,7 +7,7 @@ Audiora is a command-line application that extracts text from PDF files and conv
 ## Features
 
 - Extracts text from PDF files.
-- Converts text into audio files (MP3 format).
+- Converts text and saved into audio files (MP3 format).
 - Plays audio files sequentially.
 - Processes long text by splitting it into manageable chunks for smoother playback.
 
